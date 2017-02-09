@@ -1,7 +1,8 @@
 import urllib.request
 import urllib.parse
 import json
-import sys
+from sys import argv
+from sys import exit
 
 
 def load_json_data_fron_url(base_url, url_params):
@@ -21,4 +22,13 @@ def make_tmdb_api_request(method, api_key, extra_params=None):
     return load_json_data_fron_url(url, params)
 
 
+if __name__ == '__main__':
+    if len(argv) != 3:
+        exit('Неверное количество аргументов.')
+    movie_id = int(argv[1])
+    api_key = argv[2]
+    movie = make_tmdb_api_request('/movie/' + str(movie_id), api_key)
 
+    message = 'Бюджет фильма \"' + movie['title'] +\
+              '\" составляет ' + str(movie['budget']) + ' долларов.'
+    print(message)
