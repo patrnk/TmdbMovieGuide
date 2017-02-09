@@ -1,6 +1,7 @@
 from tmdb_api_helpers import make_tmdb_api_request
 from sys import argv
 from sys import exit
+from json import dump
 
 if __name__ == '__main__':
     if len(argv) != 3:
@@ -33,3 +34,7 @@ if __name__ == '__main__':
         movies_info[movie_id].update(keywords)
         movies_info[movie_id]['lists'] = lists['results']
 
+    print('Записываем в json-файл...')
+    with open('movies.json', 'w') as f:
+        dump(movies_info, f)
+    print('Готово!')
