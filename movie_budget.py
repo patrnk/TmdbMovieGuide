@@ -1,4 +1,4 @@
-from tmdb_api_helpers import make_tmdb_api_request
+from download_db import make_tmdb_api_request
 from sys import argv
 from sys import exit
 
