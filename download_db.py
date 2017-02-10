@@ -52,10 +52,11 @@ def get_movie_info_from_tmdb(movie_id):
 
 
 if __name__ == '__main__':
-    if len(argv) != 3:
+    if len(argv) != 4:
         print('Неверное количество аргументов.')
     movies_to_download = int(argv[1])
-    api_key = argv[2]
+    file_to_save = argv[2]
+    api_key = argv[3]
 
     print('Скачиваем идентификаторы...')
     movie_ids = get_movie_ids_from_tmdb(movies_to_download)
@@ -67,6 +68,6 @@ if __name__ == '__main__':
         movies_info[movie_info['title']] = movie_info
 
     print('Записываем в json-файл...')
-    with open('movies.json', 'w') as f:
+    with open(file_to_save, 'w') as f:
         dump(movies_info, f)
     print('Готово!')
