@@ -8,10 +8,14 @@ if __name__ == '__main__':
     database_path = argv[2]
 
     movies = None
-    with open(database_path, 'r') as f:
-        movies = load(f)
+    try:
+        with open(database_path, 'r') as f:
+            movies = load(f)
+    except FileNotFoundError:
+        exit('Файл не найден.')
     res = [value for key, value in movies.items() if query in key.lower()]
     
-    print('Результаты:')
+    message = 'Результаты:' if len(res) != 0 else 'Ничего не найдено.'
+    print(message)
     for movie in res:
         print(movie['title'])

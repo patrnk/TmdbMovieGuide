@@ -68,10 +68,14 @@ if __name__ == '__main__':
         exit('Oшибка %d.' % error.code)
 
     print('Узнаем подробности...')
-    movies_info = {}
-    for movie_id in movie_ids:
-        movie_info = get_movie_info_from_tmdb(movie_id, api_key)
-        movies_info[movie_info['title']] = movie_info
+    try:
+        movies_info = {}
+        for movie_id in movie_ids:
+            movie_info = get_movie_info_from_tmdb(movie_id, api_key)
+            movies_info[movie_info['title']] = movie_info
+    except HTTPError as error:
+        exit('Oшибка %d.' % error.code)
+
 
     print('Записываем в json-файл...')
     with open(file_to_save, 'w') as f:
