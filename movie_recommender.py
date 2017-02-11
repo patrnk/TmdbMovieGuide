@@ -14,7 +14,8 @@ def almost_equal(lhs, rhs, error_range):
 
 def form_similarity_rating(candidate, model):
     weight = {'belongs_to_collection': 1000, 'keywords': 200, 'genres': 100,
-              'budget': 30, 'runtime': 40, 'vote_average': 30}
+              'production_companies': 150, 'budget': 30, 'runtime': 40, 
+              'vote_average': 30}
     rating = 0
 
     candidate_collection = candidate['belongs_to_collection']
@@ -23,14 +24,14 @@ def form_similarity_rating(candidate, model):
         if candidate_collection['id'] == model_collection['id']:
             rating += weight['belongs_to_collection']
 
-    common_keywords = count_common_elements(candidate, model, 'keywords')
-    rating += common_keywords * weight['keywords']
-    common_genres = count_common_elements(candidate, model, 'genres')
-    rating += common_genres * weight['genres']
+    strict_criteria = ['keywords', 'genres', 'production_companies']
+    for criterion in strict_criteria:
+        common_elements = count_common_elements(candidate, model, criterion)
+        rating += common_elements * weight[criterion]
 
-    light_criteria = ['budget', 'runtime', 'vote_average']
+    loose_criteria = ['budget', 'runtime', 'vote_average']
     accuracy = {'budget': 0.2, 'runtime': 0.15, 'vote_average': 0.2}
-    for criterion in light_criteria:
+    for criterion in loose_criteria:
         is_equal = almost_equal(candidate[criterion], model[criterion],
                                 model[criterion] * accuracy[criterion])
         rating += int(is_equal) * weight[criterion]
@@ -44,6 +45,6 @@ if __name__ == '__main__':
         movies_info = load(f)
     for title in movies_info.keys():
         print(title)
-    lhs = movies_info['История игрушек 2']
-    rhs = movies_info['Пингвины Мадагаскара']
+    lhs = movies_info['Бэтмен возвращается']
+    rhs = movies_info['Хеллбой: Герой из пекла']
     print(form_similarity_rating(lhs, rhs))
