@@ -1,4 +1,4 @@
-from download_db import get_movie_info_from_tmdb
+from fetch import get_movie_info_from_tmdb
 from urllib.error import HTTPError
 from sys import argv
 from sys import exit

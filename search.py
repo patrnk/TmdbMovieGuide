@@ -1,4 +1,4 @@
-from movie_recommender import load_movies
+from recommend import load_movies
 from json import load
 from sys import argv
 
