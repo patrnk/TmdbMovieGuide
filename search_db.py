@@ -1,3 +1,4 @@
+from os.path import exists
 from json import load
 from sys import argv
 
@@ -8,11 +9,10 @@ if __name__ == '__main__':
     database_path = argv[2]
 
     movies = None
-    try:
-        with open(database_path, 'r') as f:
-            movies = load(f)
-    except FileNotFoundError:
+    if not exists(database_path):
         exit('Файл не найден.')
+    with open(database_path, 'r') as f:
+        movies = load(f)
     res = [value for key, value in movies.items() if query in key.lower()]
     
     message = 'Результаты:' if len(res) != 0 else 'Ничего не найдено.'
