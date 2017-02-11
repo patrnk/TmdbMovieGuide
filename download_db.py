@@ -39,8 +39,8 @@ def get_movie_ids_from_tmdb(number_of_ids, api_key):
 
 def get_movie_info_from_tmdb(movie_id, api_key):
     movie_info = {}
-    details_query = '/movie/' + str(movie_id)
-    keywords_query = details_query + '/keywords'
+    details_query = '/movie/%d' % movie_id
+    keywords_query =  '%s/keywords' % details_query
     
     details = make_tmdb_api_request(details_query, api_key)
     keywords = make_tmdb_api_request(keywords_query, api_key)
