@@ -1,16 +1,15 @@
-import urllib.request
-import urllib.parse
-import json
+from urllib.request import urlopen
+from urllib.parse import urlencode
+from json import dump
+from json import loads
 from sys import argv
 from sys import exit
-from json import dump
-from json import load
 
 
 def load_json_data_fron_url(base_url, url_params):
-    url = '%s?%s' % (base_url, urllib.parse.urlencode(url_params))
-    response = urllib.request.urlopen(url).read().decode('utf-8')
-    return json.loads(response)
+    url = '%s?%s' % (base_url, urlencode(url_params))
+    response = urlopen(url).read().decode('utf-8')
+    return loads(response)
 
 
 def make_tmdb_api_request(method, api_key, extra_params=None):
