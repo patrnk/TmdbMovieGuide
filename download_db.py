@@ -21,7 +21,15 @@ def make_tmdb_api_request(method, api_key, extra_params=None):
         'language': 'ru',
     }
     params.update(extra_params)
-    return load_json_data_fron_url(url, params)
+    try:
+        json_data = load_json_data_fron_url(url, params)
+    except HTTPError as error:
+        if error.code == 429:
+            sleep(10)
+            json_data = load_json_data_fron_url(url, params)
+        else:
+            raise
+    return json_data
 
 
 def get_movie_ids_from_tmdb(number_of_ids, api_key):
@@ -68,14 +76,13 @@ if __name__ == '__main__':
         exit('Oшибка %d.' % error.code)
 
     print('Узнаем подробности...')
+    movies_info = {}
     try:
-        movies_info = {}
         for movie_id in movie_ids:
             movie_info = get_movie_info_from_tmdb(movie_id, api_key)
             movies_info[movie_info['title']] = movie_info
     except HTTPError as error:
         exit('Oшибка %d.' % error.code)
-
 
     print('Записываем в json-файл...')
     with open(file_to_save, 'w') as f:
