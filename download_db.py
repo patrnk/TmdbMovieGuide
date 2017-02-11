@@ -24,7 +24,7 @@ def make_tmdb_api_request(method, api_key, extra_params=None):
     return load_json_data_fron_url(url, params)
 
 
-def get_movie_ids_from_tmdb(number_of_ids):
+def get_movie_ids_from_tmdb(number_of_ids, api_key):
     request_params = {'page': 1, 'include_adult': True}
     movie_ids = []
     while len(movie_ids) < number_of_ids:
@@ -38,7 +38,7 @@ def get_movie_ids_from_tmdb(number_of_ids):
     return movie_ids
 
 
-def get_movie_info_from_tmdb(movie_id):
+def get_movie_info_from_tmdb(movie_id, api_key):
     movie_info = {}
     details_query = '/movie/' + str(movie_id)
     keywords_query = details_query + '/keywords'
@@ -59,12 +59,12 @@ if __name__ == '__main__':
     api_key = argv[3]
 
     print('Скачиваем идентификаторы...')
-    movie_ids = get_movie_ids_from_tmdb(movies_to_download)
+    movie_ids = get_movie_ids_from_tmdb(movies_to_download, api_key)
 
     print('Узнаем подробности...')
     movies_info = {}
     for movie_id in movie_ids:
-        movie_info = get_movie_info_from_tmdb(movie_id)
+        movie_info = get_movie_info_from_tmdb(movie_id, api_key)
         movies_info[movie_info['title']] = movie_info
 
     print('Записываем в json-файл...')
