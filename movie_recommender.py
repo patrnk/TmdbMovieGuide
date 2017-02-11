@@ -1,3 +1,4 @@
+from os.path import exists
 from json import load
 from sys import argv
 from sys import exit
@@ -43,6 +44,8 @@ def get_rating(candidate, model):
 
 
 def load_movies(filename):
+    if not exists(filename):
+        return None
     with open(filename, 'r') as f:
         return load(f)
 
@@ -55,6 +58,8 @@ if __name__ == '__main__':
     filename = argv[3]
 
     database = load_movies(filename)
+    if database is None:
+        exit('Файл не найден.')
 
     if query not in database:
         exit('Этого фильма нет в базе.')
