@@ -50,3 +50,5 @@ $ python3 movie_recommender.py "Корпорация монстров" 7 movies.
 Храбрая сердцем
 ```
 Here, "Корпорация монстров" is the movie upon which the suggestions are based. "7" is the number of suggested movies and movies.json is a json file retrieved with download_db.py.
+# Purpose
+This is a homework assignment for styleru_py course.
