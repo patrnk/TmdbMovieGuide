@@ -1,4 +1,5 @@
 from urllib.request import urlopen
+from urllib.request import HTTPError
 from urllib.parse import urlencode
 from json import dump
 from json import loads
@@ -53,12 +54,18 @@ def get_movie_info_from_tmdb(movie_id, api_key):
 if __name__ == '__main__':
     if len(argv) != 4:
         print('Неверное количество аргументов.')
-    movies_to_download = int(argv[1])
+    try: 
+        movies_to_download = int(argv[1])
+    except ValueError:
+        exit('Количество фильмов для скачивания должно быть числом.')
     file_to_save = argv[2]
     api_key = argv[3]
 
     print('Скачиваем идентификаторы...')
-    movie_ids = get_movie_ids_from_tmdb(movies_to_download, api_key)
+    try:
+        movie_ids = get_movie_ids_from_tmdb(movies_to_download, api_key)
+    except HTTPError as error:
+        exit('Oшибка %d.' % error.code)
 
     print('Узнаем подробности...')
     movies_info = {}
