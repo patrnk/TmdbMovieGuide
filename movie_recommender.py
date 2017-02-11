@@ -1,5 +1,6 @@
 from json import load
 from sys import argv
+from sys import exit
 
 
 def count_common_elements(lhs, rhs, key):
@@ -9,10 +10,12 @@ def count_common_elements(lhs, rhs, key):
 
 
 def almost_equal(lhs, rhs, error_range):
+    if lhs is None or rhs is None:
+        return False
     return lhs - error_range <= rhs and rhs <= lhs + error_range
 
 
-def form_similarity_rating(candidate, model):
+def get_rating(candidate, model):
     weight = {'belongs_to_collection': 1000, 'keywords': 200, 'genres': 100,
               'production_companies': 150, 'budget': 30, 'runtime': 40, 
               'vote_average': 30}
@@ -39,12 +42,28 @@ def form_similarity_rating(candidate, model):
     return rating
 
 
+def load_movies(filename):
+    with open(filename, 'r') as f:
+        return load(f)
+
+
 if __name__ == '__main__':
-    movies_info = None
-    with open('movies.json', 'r') as f:
-        movies_info = load(f)
-    for title in movies_info.keys():
+    if len(argv) != 4:
+        exit('Неверное количество аргументов.')
+    query = argv[1]
+    top_count = int(argv[2])
+    filename = argv[3]
+
+    database = load_movies(filename)
+
+    if query not in database:
+        exit('Этого фильма нет в базе.')
+    target = database.pop(query)
+
+    chart = [(get_rating(movie, target), title) 
+             for title, movie in database.items()]
+    chart.sort(reverse = True)
+    
+    print('Рекомендуем:')
+    for rating, title in chart[:top_count]:
         print(title)
-    lhs = movies_info['Бэтмен возвращается']
-    rhs = movies_info['Хеллбой: Герой из пекла']
-    print(form_similarity_rating(lhs, rhs))
