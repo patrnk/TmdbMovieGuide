@@ -64,30 +64,30 @@ def get_movie_info_from_tmdb(movie_id, api_key):
 
 if __name__ == '__main__':
     if len(argv) != 4:
-        print('Неверное количество аргументов.')
+        print('Wrong number of parameters.')
     try: 
         movies_to_download = int(argv[1])
     except ValueError:
-        exit('Количество фильмов для скачивания должно быть числом.')
+        exit('Number of movies to download must be an integer.')
     file_to_save = argv[2]
     api_key = argv[3]
 
-    print('Скачиваем идентификаторы...')
+    print('Downloading ids...')
     try:
         movie_ids = get_movie_ids_from_tmdb(movies_to_download, api_key)
     except HTTPError as error:
-        exit('Oшибка %d.' % error.code)
+        exit('Error %d.' % error.code)
 
-    print('Узнаем подробности...')
+    print('Getting additional info...')
     movies_info = {}
     try:
         for movie_id in movie_ids:
             movie_info = get_movie_info_from_tmdb(movie_id, api_key)
             movies_info[movie_info['title']] = movie_info
     except HTTPError as error:
-        exit('Oшибка %d.' % error.code)
+        exit('Error %d.' % error.code)
 
-    print('Записываем в json-файл...')
+    print('Writing to a json-file...')
     with open(file_to_save, 'w') as f:
         dump(movies_info, f)
-    print('Готово!')
+    print('Done!')

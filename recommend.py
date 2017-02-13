@@ -54,23 +54,23 @@ def load_movies_from_file(filepath):
 
 if __name__ == '__main__':
     if len(argv) != 4:
-        exit('Неверное количество аргументов.')
+        exit('Wrong number of parameters.')
     query = argv[1]
     top_count = int(argv[2])
     filename = argv[3]
 
     database = load_movies_from_file(filename)
     if database is None:
-        exit('Файл не найден.')
+        exit('File\'s not found.')
 
     if query not in database:
-        exit('Этого фильма нет в базе.')
+        exit('File doesn\'t contain any info about the movie.')
     target = database.pop(query)
 
     chart = [(get_similarity_rating(movie, target), title) 
              for title, movie in database.items()]
     chart.sort(reverse = True)
     
-    print('Рекомендуем:')
+    print('Recommendations:')
     for rating, title in chart[:top_count]:
         print(title)

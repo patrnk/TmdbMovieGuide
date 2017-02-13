@@ -1,8 +1,6 @@
 # TMDB Movie Guide
 The repository consists of the scripts that work with [TMDB](https://www.themoviedb.org/)'s API.
 
-The interface of the scripts is in Russian.
-
 The scripts require Python 3.5 to run. Some of them require the user to have a working v.3 API key obtained from TMDB.
 ### budget.py
 The script retrieves movie's budget. Example usage:
