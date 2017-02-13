@@ -7,7 +7,10 @@ from sys import exit
 def get_movie_id_and_api_key(argv):
     if len(argv) != 3:
         exit('Неверное количество аргументов.')
-    movie_id = int(argv[1])
+    try:
+        movie_id = int(argv[1])
+    except ValueError:
+        exit('Номер фильма должен быть натуральным числом.')
     api_key = argv[2]
     return (movie_id, api_key)
     
