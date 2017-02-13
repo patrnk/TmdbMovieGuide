@@ -19,7 +19,7 @@ def make_tmdb_api_request(method, api_key, extra_params=None):
     url = 'https://api.themoviedb.org/3%s' % method
     params = {
         'api_key': api_key,
-        'language': 'ru',
+        'language': 'en',
     }
     params.update(extra_params)
     too_many_requests = 429
