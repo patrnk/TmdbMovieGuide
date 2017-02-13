@@ -1,17 +1,18 @@
 from fetch import get_movie_info_from_tmdb
 from urllib.error import HTTPError
+from getpass import getpass
 from sys import argv
 from sys import exit
 
 
 def get_movie_id_and_api_key(argv):
-    if len(argv) != 3:
+    if len(argv) != 2:
         exit('Wrong number of parameters provided.')
     try:
         movie_id = int(argv[1])
     except ValueError:
         exit('The movie id must be an positive integer.')
-    api_key = argv[2]
+    api_key = getpass('TMDB API key:')
     return (movie_id, api_key)
     
 

@@ -3,6 +3,7 @@ from urllib.request import HTTPError
 from urllib.parse import urlencode
 from json import dump
 from json import loads
+from getpass import getpass
 from sys import argv
 from sys import exit
 
@@ -63,14 +64,14 @@ def get_movie_info_from_tmdb(movie_id, api_key):
 
 
 if __name__ == '__main__':
-    if len(argv) != 4:
+    if len(argv) != 3:
         print('Wrong number of parameters.')
     try: 
         movies_to_download = int(argv[1])
     except ValueError:
         exit('Number of movies to download must be an integer.')
     file_to_save = argv[2]
-    api_key = argv[3]
+    api_key = getpass('TMDB API key:')
 
     print('Downloading ids...')
     try:
