@@ -1,20 +1,18 @@
 from fetch import get_movie_info_from_tmdb
 from urllib.error import HTTPError
 from getpass import getpass
-from sys import argv
 from sys import exit
+import argparse
 
 
-def get_movie_id_and_api_key(argv):
-    if len(argv) != 2:
-        exit('Wrong number of parameters provided.')
-    try:
-        movie_id = int(argv[1])
-    except ValueError:
-        exit('The movie id must be an positive integer.')
+def get_movie_id_and_api_key():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('movie_id', 
+                        help='id of the movie to get info about', type=int)
+    args = parser.parse_args()
     api_key = getpass('TMDB API key:')
-    return (movie_id, api_key)
-    
+    return (args.movie_id, api_key)
+
 
 def get_movie(movie_id, api_key):
     try:
@@ -27,13 +25,13 @@ def get_movie(movie_id, api_key):
     return movie
 
 
-def output_movie_budget(movie):
+def print_movie_budget(movie):
     message = 'The budget of the movie \"%s\" is $%d.'
     message = message % (movie['title'], movie['budget'])
     print(message)
 
 
 if __name__ == '__main__':
-    movie_id, api_key = get_movie_id_and_api_key(argv)
+    movie_id, api_key = get_movie_id_and_api_key()
     movie = get_movie(movie_id, api_key)
-    output_movie_budget(movie)
+    print_movie_budget(movie)
