@@ -1,4 +1,5 @@
 from os.path import exists
+from argparse import ArgumentParser
 from json import load
 from sys import argv
 from sys import exit
@@ -59,25 +60,33 @@ def load_movies_from_file(filepath):
         return load(f)
 
 
-if __name__ == '__main__':
-    if len(argv) != 4:
-        exit('Wrong number of parameters.')
-    query = argv[1]
-    top_count = int(argv[2])
-    filename = argv[3]
+def get_args():
+    parser = ArgumentParser()
+    parser.add_argument('query', help='the exact name of the movie ' + 
+                        'upon which the recommendations are based')
+    parser.add_argument('-t', '--top', type=int, default=5, 
+                        help='the number of recommendations to make')
+    parser.add_argument('-i', '--infile', type=str, default='movies.json', 
+                        help='input file, in JSON format')
+    args = parser.parse_args()
+    return args
 
-    database = load_movies_from_file(filename)
+
+if __name__ == '__main__':
+    args = get_args()
+
+    database = load_movies_from_file(args.infile)
     if database is None:
         exit('File\'s not found.')
 
-    if query not in database:
+    if args.query not in database:
         exit('File doesn\'t contain any info about the movie.')
-    target = database.pop(query)
+    target = database.pop(args.query)
 
     chart = [(get_similarity_rating(movie, target), title) 
              for title, movie in database.items()]
     chart.sort(reverse = True)
     
     print('Recommendations:')
-    for rating, title in chart[:top_count]:
+    for rating, title in chart[:args.top]:
         print(title)
