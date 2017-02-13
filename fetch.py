@@ -7,7 +7,7 @@ from sys import argv
 from sys import exit
 
 
-def load_json_data_fron_url(base_url, url_params):
+def load_json_data_from_url(base_url, url_params):
     url = '%s?%s' % (base_url, urlencode(url_params))
     response = urlopen(url).read().decode('utf-8')
     return loads(response)
@@ -22,11 +22,11 @@ def make_tmdb_api_request(method, api_key, extra_params=None):
     }
     params.update(extra_params)
     try:
-        json_data = load_json_data_fron_url(url, params)
+        json_data = load_json_data_from_url(url, params)
     except HTTPError as error:
         if error.code == 429:
             sleep(10)
-            json_data = load_json_data_fron_url(url, params)
+            json_data = load_json_data_from_url(url, params)
         else:
             raise
     return json_data
