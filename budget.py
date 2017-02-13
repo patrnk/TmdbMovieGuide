@@ -26,8 +26,9 @@ def get_movie(movie_id, api_key):
 
 
 def print_movie_budget(movie):
-    message = 'The budget of the movie \"%s\" is $%d.'
-    message = message % (movie['title'], movie['budget'])
+    message = 'The budget of the movie \"%s\" is %s.'
+    budget = "$%d" % movie['budget'] if movie['budget'] != 0 else 'unknown'
+    message = message % (movie['title'], budget)
     print(message)
 
 
