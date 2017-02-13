@@ -1,4 +1,4 @@
-from recommend import load_movies
+from recommend import load_movies_from_file
 from json import load
 from sys import argv
 
@@ -8,7 +8,7 @@ if __name__ == '__main__':
     query = argv[1].lower()
     movies_path = argv[2]
 
-    movies = load_movies(movies_path)
+    movies = load_movies_from_file(movies_path)
     if movies is None:
         exit('File\'s not found.')
     res = [value for key, value in movies.items() if query in key.lower()]
