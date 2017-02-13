@@ -21,11 +21,13 @@ def make_tmdb_api_request(method, api_key, extra_params=None):
         'language': 'ru',
     }
     params.update(extra_params)
+    too_many_requests = 429
+    cooldown_time_in_seconds = 10
     try:
         json_data = load_json_data_from_url(url, params)
     except HTTPError as error:
-        if error.code == 429:
-            sleep(10)
+        if error.code == too_many_requests:
+            sleep(cooldown_time_in_seconds)
             json_data = load_json_data_from_url(url, params)
         else:
             raise
