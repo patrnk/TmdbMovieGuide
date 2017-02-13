@@ -4,16 +4,14 @@ from sys import argv
 from sys import exit
 
 
-def count_common_elements(lhs, rhs, key):
-    lhs_item_set = set([item['id'] for item in lhs[key]])
-    rhs_item_set = set([item['id'] for item in rhs[key]])
-    return len(lhs_item_set & rhs_item_set) 
+def count_common_items_in_lists(list1, list2):
+    return len(set(list1) & set(list2))
 
 
-def almost_equal(lhs, rhs, error_range):
+def numbers_differ_in_range(num1, num2, difference_range):
     if lhs or rhs is None:
         return False
-    return lhs - error_range <= rhs <= lhs + error_range
+    return num1 - difference_range <= num2 <= num1 + difference_range
 
 
 def get_similarity_rating(movie1, movie2):
@@ -29,16 +27,13 @@ def get_similarity_rating(movie1, movie2):
               'vote_average': 30}
     rating = 0
 
-    movie1_collection = movie1['belongs_to_collection']
-    movie2_collection = movie2['belongs_to_collection']
-    if movie1_collection is not None and movie2_collection is not None:
-        if movie1_collection['id'] == movie2_collection['id']:
-            rating += weight['belongs_to_collection']
-
-    strict_criteria = ['keywords', 'genres', 'production_companies']
+    strict_criteria = ['collection', 'keywords', 
+                       'genres', 'production_companies']
     for criterion in strict_criteria:
-        common_elements = count_common_elements(movie1, movie2, criterion)
-        rating += common_elements * weight[criterion]
+        items1 = [item['id'] for item in movie1[criterion]]
+        items2 = [item['id'] for item in movie2[criterion]]
+        common_items = count_common_items_in_lists(items1, items2)
+        rating += common_items * weight[criterion]
 
     loose_criteria = ['budget', 'runtime', 'vote_average']
     accuracy = {'budget': 0.2, 'runtime': 0.15, 'vote_average': 0.2}
