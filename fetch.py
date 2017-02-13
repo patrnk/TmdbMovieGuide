@@ -3,8 +3,10 @@ from urllib.request import HTTPError
 from urllib.parse import urlencode
 from json import dump
 from json import loads
+from argparse import ArgumentParser
 from getpass import getpass
-from sys import argv
+from os.path import exists
+from distutils.util import strtobool
 from sys import exit
 
 
@@ -63,19 +65,30 @@ def get_movie_info_from_tmdb(movie_id, api_key):
     return movie_info
 
 
+def show_delete_prompt(query):
+    while True:
+        val = input('%s [y/n]: ' % query)
+        try:
+            answer = strtobool(val)
+        except ValueError:
+            print('Please answer with either yes or no')
+            continue
+        return answer
+
+
 if __name__ == '__main__':
-    if len(argv) != 3:
-        print('Wrong number of parameters.')
-    try: 
-        movies_to_download = int(argv[1])
-    except ValueError:
-        exit('Number of movies to download must be an integer.')
-    file_to_save = argv[2]
+    parser = ArgumentParser()
+    parser.add_argument('movies_to_download', type=int,
+                        help='number of movies to download')
+    parser.add_argument('-o', '--outfile', type=str, default='movies.json',
+                        help='output file, in JSON format')
+    args = parser.parse_args()
     api_key = getpass('TMDB API key:')
 
     print('Downloading ids...')
     try:
-        movie_ids = get_movie_ids_from_tmdb(movies_to_download, api_key)
+        movie_ids = get_movie_ids_from_tmdb(args.movies_to_download, 
+                                            api_key)
     except HTTPError as error:
         exit('Error %d.' % error.code)
 
@@ -89,6 +102,11 @@ if __name__ == '__main__':
         exit('Error %d.' % error.code)
 
     print('Writing to a json-file...')
-    with open(file_to_save, 'w') as f:
+    if exists(args.outfile):
+        query = '%s already exists. Rewrite?' % args.outfile
+        if not show_delete_prompt(query):
+            print('Nothing was written.')
+            exit(0)
+    with open(args.outfile, 'w') as f:
         dump(movies_info, f)
     print('Done!')
