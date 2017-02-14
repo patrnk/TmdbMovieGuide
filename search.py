@@ -22,10 +22,9 @@ if __name__ == '__main__':
     if movies is None:
         exit('File\'s not found.')
 
-    res = [value for key, value in movies.items() 
-           if args.query.lower() in key.lower()]
+    res = [key for key in movies if args.query.lower() in key.lower()]
     
     message = 'Results:' if len(res) != 0 else 'Nothing was found.'
     print(message)
-    for movie in res:
-        print(movie['title'])
+    for movie_title in res:
+        print(movie_title)
