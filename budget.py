@@ -2,16 +2,15 @@ from fetch import get_movie_info_from_tmdb
 from urllib.error import HTTPError
 from getpass import getpass
 from sys import exit
-import argparse
+from argparse import ArgumentParser
 
 
-def get_movie_id_and_api_key():
-    parser = argparse.ArgumentParser()
+def get_args():
+    parser = ArgumentParser()
     parser.add_argument('movie_id', 
                         help='id of the movie to get info about', type=int)
     args = parser.parse_args()
-    api_key = getpass('TMDB API key:')
-    return (args.movie_id, api_key)
+    return args
 
 
 def get_movie(movie_id, api_key):
@@ -33,6 +32,7 @@ def print_movie_budget(movie):
 
 
 if __name__ == '__main__':
-    movie_id, api_key = get_movie_id_and_api_key()
-    movie = get_movie(movie_id, api_key)
+    args = get_args()
+    api_key = getpass('TMDB API key:')
+    movie = get_movie(args.movie_id, api_key)
     print_movie_budget(movie)
