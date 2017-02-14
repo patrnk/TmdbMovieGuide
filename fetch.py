@@ -65,6 +65,13 @@ def get_movie_info_from_tmdb(movie_id, api_key):
     return movie_info
 
 
+def get_movies_info_from_tmdb(movie_ids, api_key):
+    movies_info = {}
+    for movie_id in movie_ids:
+        movie_info = get_movie_info_from_tmdb(movie_id, api_key)
+        movies_info[movie_info['title']] = movie_info
+    
+
 def show_delete_prompt(query):
     while True:
         val = input('%s [y/n]: ' % query)
@@ -76,37 +83,43 @@ def show_delete_prompt(query):
         return answer
 
 
-if __name__ == '__main__':
+def get_args():
     parser = ArgumentParser()
     parser.add_argument('movies_to_download', type=int,
                         help='number of movies to download')
     parser.add_argument('-o', '--outfile', type=str, default='movies.json',
                         help='output file, in JSON format')
     args = parser.parse_args()
-    api_key = getpass('TMDB API key:')
+    return args
+    
 
-    print('Downloading ids...')
-    try:
-        movie_ids = get_movie_ids_from_tmdb(args.movies_to_download, 
-                                            api_key)
-    except HTTPError as error:
-        exit('Error %d.' % error.code)
-
-    print('Getting additional info...')
-    movies_info = {}
-    try:
-        for movie_id in movie_ids:
-            movie_info = get_movie_info_from_tmdb(movie_id, api_key)
-            movies_info[movie_info['title']] = movie_info
-    except HTTPError as error:
-        exit('Error %d.' % error.code)
-
-    print('Writing to a json-file...')
-    if exists(args.outfile):
+def prompt_if_exists(outfile):
+    if exists(outfile):
         query = '%s already exists. Rewrite?' % args.outfile
         if not show_delete_prompt(query):
             print('Nothing was written.')
             exit(0)
+
+
+if __name__ == '__main__':
+    args = get_args()
+    api_key = getpass('TMDB API key:')
+    prompt_if_exists(args.outfile)
+
+    print('Downloading ids...')
+    try:
+        movie_ids = get_movie_ids_from_tmdb(args.movies_to_download, 
+                                       api_key)
+    except HTTPError as error:
+        exit('Error %d.' % error.code)
+
+    print('Getting additional info...')
+    try:
+        movies_info = get_movies_info_from_tmdb(movie_ids, api_key)
+    except HTTPError as error:
+        exit('Error %d.' % error.code)
+    
+    print('Writing to a json-file...')
     with open(args.outfile, 'w') as f:
         dump(movies_info, f)
     print('Done!')
