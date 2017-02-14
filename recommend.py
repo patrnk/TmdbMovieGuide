@@ -72,6 +72,13 @@ def get_args():
     return args
 
 
+def get_top_recommended_movies(database, top_count):
+    chart = [(get_similarity_rating(movie, target), title) 
+             for title, movie in database.items()]
+    chart.sort(reverse = True)
+    return [title for _, title in chart[:top_count]]
+    
+
 if __name__ == '__main__':
     args = get_args()
 
@@ -83,10 +90,5 @@ if __name__ == '__main__':
         exit('File doesn\'t contain any info about the movie.')
     target = database.pop(args.query)
 
-    chart = [(get_similarity_rating(movie, target), title) 
-             for title, movie in database.items()]
-    chart.sort(reverse = True)
-    
     print('Recommendations:')
-    for rating, title in chart[:args.top]:
-        print(title)
+    print('\n'.join(get_top_recommended_movies(database, args.top)))
