@@ -7,7 +7,7 @@ The script retrieves movie's budget. Example usage:
 ```#!bash
 $ python3 budget.py 215
 TMDB API key:
-The budget of the movie "Saw II" is $4000000.
+The budget of the movie 'Saw II' is $4000000.
 ```
 Here, 215 is the id of the movie on TMDB. 
 ### fetch.py
@@ -29,27 +29,21 @@ This script may take a long time to execute.
 The script retrieves finds all movie titles with the parameter as a substring. 
 Example usage:
 ```#!bash
-$ python3 search.py "пил" movies.json
-Результаты:
-Пила 2
-Скотт Пилигрим против всех
-Пила. Игра на выживание
+$ python3 search.py 'xxx' -i test.json
+Results:
+xXx: Return of Xander Cage
 ```
-Here, "пил" is the substring to search and movies.json is a json file retrieved with fetch.py.
+Here, 'xxx' is the substring to search and test.json is a json file retrieved with fetch.py (by default, it's 'movie.json').
 ### recommend.py
 The script suggests a list of movies to watch based on the movie title provided. The movie must be in a database.
 Example usage:
 ```#!bash
-$ python3 recommend.py "Корпорация монстров" 7 movies.json
-Рекомендуем:
-Университет монстров
-Тачки 2
-История игрушек 3: Большой побег
-Тачки
-Головоломка
-В поисках Немо
-Храбрая сердцем
+$ python3 recommend.py 'xXx: Return of Xander Cage' --top 3 --infile test.json
+Recommendations:
+Jurassic World
+Suicide Squad
+Interstellar
 ```
-Here, "Корпорация монстров" is the movie upon which the suggestions are based. "7" is the number of suggested movies and movies.json is a json file retrieved with fetch.py.
+Here, 'xXx: Return of Xander Cage' is the movie upon which the suggestions are based. '3' is the number of suggested movies and 'test.json' is a json file retrieved with fetch.py (again, it's 'movies.json' by default).
 # Purpose
 This is a homework assignment for styleru_py course.
