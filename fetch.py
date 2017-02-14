@@ -6,6 +6,7 @@ from json import loads
 from argparse import ArgumentParser
 from getpass import getpass
 from os.path import exists
+from os import remove
 from distutils.util import strtobool
 from sys import exit
 
@@ -70,9 +71,10 @@ def get_movies_info_from_tmdb(movie_ids, api_key):
     for movie_id in movie_ids:
         movie_info = get_movie_info_from_tmdb(movie_id, api_key)
         movies_info[movie_info['title']] = movie_info
+    return movies_info
     
 
-def show_delete_prompt(query):
+def ask_to_overwrite(query):
     while True:
         val = input('%s [y/n]: ' % query)
         try:
@@ -93,18 +95,15 @@ def get_args():
     return args
     
 
-def prompt_if_exists(outfile):
-    if exists(outfile):
-        query = '%s already exists. Rewrite?' % args.outfile
-        if not show_delete_prompt(query):
-            print('Nothing was written.')
-            exit(0)
-
-
 if __name__ == '__main__':
     args = get_args()
-    api_key = getpass('TMDB API key:')
-    prompt_if_exists(args.outfile)
+    api_key = getpass('TMDB API key: ')
+    if exists(args.outfile):
+        query = '%s already exists. Rewrite?' % args.outfile
+        if ask_to_overwrite(query) == 0:
+            print('Nothing was written.')
+            exit(0)
+        remove(args.outfile)
 
     print('Downloading ids...')
     try:

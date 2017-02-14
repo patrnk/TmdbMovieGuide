@@ -1,27 +1,30 @@
 # TMDB Movie Guide
-The repository consists of the scripts that work with [TMDB](https://www.themoviedb.org/)'s API.
+The repository consists of the scripts that work with [TMDB](https://www.themoviedb.org/)'s API. For thorough description of how to use a particular script, run the script with -h option.
 
 The scripts require Python 3.5 to run. Some of them require the user to have a working v.3 API key obtained from TMDB.
 ### budget.py
 The script retrieves movie's budget. Example usage:
 ```#!bash
-$ python3 budget.py 215 b000b0000d0bf0ac00000a000006e000
-Бюджет фильма "Пила 2" составляет 4000000 долларов.
+$ python3 budget.py 215
+TMDB API key:
+The budget of the movie "Saw II" is $4000000.
 ```
-Here, 215 is the id of the movie on TMDB, and b000b0000d0bf0ac00000a000006e000 is an v.3 API key.
+Here, 215 is the id of the movie on TMDB. 
 ### fetch.py
 The script retrieves various info about random movies and saves it into a file. Note that in order to comply with the EULA you should delete the files in a couple of days. 
 Example usage:
 ```#!bash
-$ python3 fetch.py 1000 movies.json b000b0000d0bf0ac00000a000006e000
-Скачиваем идентификаторы...
-Узнаем подробности...
-Записываем в json-файл...
-Готово!
+$ python3 fetch.py 1000 -o test.json
+TMDB API key:
+test.json already exists. Rewrite? [y/n]: y
+Downloading ids...
+Getting additional info...
+Writing to a json-file...
+Done!
 ```
-Here, 1000 is the number of movies to save in a movies.json file. b000b0000d0bf0ac00000a000006e000 is an v.3 API key.
+Here, 1000 is the number of movies to save in a test.json file. In this case, the file already exist, but we decide to overwrite it. By default everything is saved into movies.json.
 
-The script may take a long time to execute.
+This script may take a long time to execute.
 ### search.py
 The script retrieves finds all movie titles with the parameter as a substring. 
 Example usage:
