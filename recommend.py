@@ -60,7 +60,7 @@ def load_movies_from_file(filepath):
         return load(f)
 
 
-def get_args():
+def get_argument_parser():
     parser = ArgumentParser()
     parser.add_argument('query', help='the exact name of the movie ' + 
                         'upon which the recommendations are based')
@@ -68,8 +68,7 @@ def get_args():
                         help='the number of recommendations to make')
     parser.add_argument('-i', '--infile', type=str, default='movies.json', 
                         help='input file, in JSON format')
-    args = parser.parse_args()
-    return args
+    return parser
 
 
 def get_top_recommended_movies(database, top_count):
@@ -80,7 +79,7 @@ def get_top_recommended_movies(database, top_count):
     
 
 if __name__ == '__main__':
-    args = get_args()
+    args = get_argument_parser().parse_args()
 
     database = load_movies_from_file(args.infile)
     if database is None:

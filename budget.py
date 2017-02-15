@@ -6,12 +6,11 @@ from sys import exit
 from argparse import ArgumentParser
 
 
-def get_args():
+def get_argument_parser():
     parser = ArgumentParser()
     parser.add_argument('movie_id', 
                         help='id of the movie to get info about', type=int)
-    args = parser.parse_args()
-    return args
+    return parser
 
 
 def get_movie(movie_id, api_key):
@@ -27,7 +26,7 @@ def print_movie_budget(movie):
 
 
 if __name__ == '__main__':
-    args = get_args()
+    args = get_argument_parser().parse_args()
     api_key = getpass('TMDB API key: ')
 
     if not is_tmdb_available():

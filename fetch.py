@@ -42,7 +42,7 @@ def get_movie_ids_from_tmdb(number_of_ids, api_key):
     request_params = {'page': 1, 'include_adult': True}
     movie_ids = []
     movies_per_page = 20
-    for i in range(0, number_of_ids, movies_per_page):
+    for _ in range(0, number_of_ids, movies_per_page):
         response_page = make_tmdb_api_request('/discover/movie',\
                                               api_key, request_params)
         for movie in response_page['results']:
@@ -104,14 +104,13 @@ def ask_to_overwrite(query):
         return answer
 
 
-def get_args():
+def get_argument_parser():
     parser = ArgumentParser()
     parser.add_argument('movies_to_download', type=int,
                         help='number of movies to download')
     parser.add_argument('-o', '--outfile', type=str, default='movies.json',
                         help='output file, in JSON format')
-    args = parser.parse_args()
-    return args
+    return parser
     
 
 def write_to_file_as_json(data, outfile):
@@ -120,7 +119,7 @@ def write_to_file_as_json(data, outfile):
 
 
 if __name__ == '__main__':
-    args = get_args()
+    args = get_argument_parser().parse_args()
     api_key = getpass('TMDB API key: ')
 
     if not is_tmdb_available():
