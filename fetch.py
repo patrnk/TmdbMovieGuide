@@ -25,12 +25,12 @@ def make_tmdb_api_request(method, api_key, extra_params=None):
         'language': 'en',
     }
     params.update(extra_params)
-    too_many_requests = 429
+    too_many_requests_error_code = 429
     cooldown_time_in_seconds = 10
     try:
         json_data = load_json_data_from_url(url, params)
     except HTTPError as error:
-        if error.code == too_many_requests:
+        if error.code == too_many_requests_error_code:
             sleep(cooldown_time_in_seconds)
             json_data = load_json_data_from_url(url, params)
         else:
@@ -114,20 +114,25 @@ def get_args():
     return args
     
 
+def write_to_file_as_json(data, outfile):
+    with open(outfile, 'w') as f:
+        dump(data, f)
+
+
 if __name__ == '__main__':
     args = get_args()
     api_key = getpass('TMDB API key: ')
+
+    if not is_tmdb_available():
+        exit('Can\'t connect to TMDB')
+    if not is_valid_tmdb_api_v3_key(api_key):
+        exit('Bad API key.')
     if exists(args.outfile):
         query = '%s already exists. Rewrite?' % args.outfile
         if ask_to_overwrite(query) == 0:
             print('Nothing was written.')
             exit(0)
         remove(args.outfile)
-
-    if not is_tmdb_available():
-        exit('Can\'t connect to TMDB')
-    if not is_valid_tmdb_api_v3_key(api_key):
-        exit('Bad API key.')
 
     print('Downloading ids...')
     movie_ids = get_movie_ids_from_tmdb(args.movies_to_download, api_key)
@@ -136,6 +141,5 @@ if __name__ == '__main__':
     movies_info = get_movies_info_from_tmdb(movie_ids, api_key)
     
     print('Writing to a json-file...')
-    with open(args.outfile, 'w') as f:
-        dump(movies_info, f)
+    write_to_file_as_json(movies_info, args.outfile)
     print('Done!')
