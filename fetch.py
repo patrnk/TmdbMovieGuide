@@ -42,7 +42,7 @@ def get_movie_ids_from_tmdb(number_of_ids, api_key):
     request_params = {'page': 1, 'include_adult': True}
     movie_ids = []
     movies_per_page = 20
-    for i in range(0, number_of_ids, movies_per_page):
+    for _ in range(0, number_of_ids, movies_per_page):
         response_page = make_tmdb_api_request('/discover/movie',\
                                               api_key, request_params)
         for movie in response_page['results']:
