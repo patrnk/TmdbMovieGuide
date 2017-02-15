@@ -72,7 +72,26 @@ def get_movies_info_from_tmdb(movie_ids, api_key):
         movie_info = get_movie_info_from_tmdb(movie_id, api_key)
         movies_info[movie_info['title']] = movie_info
     return movies_info
-    
+
+
+def is_tmdb_available():
+    try:
+        urlopen('https://www.themoviedb.org/', timeout=10)
+    except:
+        return False
+    return True
+
+
+def is_valid_tmdb_api_v3_key(api_key):
+    unauthorized_access_error_code = 401
+    try:
+        make_tmdb_api_request('/timezones/list', api_key)
+    except HTTPError as error:
+        if error.code == unauthorized_access_error_code:
+            return False
+        return None
+    return True
+
 
 def ask_to_overwrite(query):
     while True:
@@ -105,18 +124,16 @@ if __name__ == '__main__':
             exit(0)
         remove(args.outfile)
 
+    if not is_tmdb_available():
+        exit('Can\'t connect to TMDB')
+    if not is_valid_tmdb_api_v3_key(api_key):
+        exit('Bad API key.')
+
     print('Downloading ids...')
-    try:
-        movie_ids = get_movie_ids_from_tmdb(args.movies_to_download, 
-                                       api_key)
-    except HTTPError as error:
-        exit('Error %d.' % error.code)
+    movie_ids = get_movie_ids_from_tmdb(args.movies_to_download, api_key)
 
     print('Getting additional info...')
-    try:
-        movies_info = get_movies_info_from_tmdb(movie_ids, api_key)
-    except HTTPError as error:
-        exit('Error %d.' % error.code)
+    movies_info = get_movies_info_from_tmdb(movie_ids, api_key)
     
     print('Writing to a json-file...')
     with open(args.outfile, 'w') as f:

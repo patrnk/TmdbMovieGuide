@@ -1,5 +1,6 @@
 from fetch import get_movie_info_from_tmdb
-from urllib.error import HTTPError
+from fetch import is_tmdb_available
+from fetch import is_valid_tmdb_api_v3_key
 from getpass import getpass
 from sys import exit
 from argparse import ArgumentParser
@@ -14,13 +15,7 @@ def get_args():
 
 
 def get_movie(movie_id, api_key):
-    try:
-        movie = get_movie_info_from_tmdb(movie_id, api_key)
-    except HTTPError as error:
-        if error.code == 401:
-            exit('Bad API key.')
-        else:
-            exit('Error %s.' % error.code)
+    movie = get_movie_info_from_tmdb(movie_id, api_key)
     return movie
 
 
@@ -33,6 +28,12 @@ def print_movie_budget(movie):
 
 if __name__ == '__main__':
     args = get_args()
-    api_key = getpass('TMDB API key:')
+    api_key = getpass('TMDB API key: ')
+
+    if not is_tmdb_available():
+        exit('Can\'t connect to TMDB')
+    if not is_valid_tmdb_api_v3_key(api_key):
+        exit('Bad API key.')
+
     movie = get_movie(args.movie_id, api_key)
     print_movie_budget(movie)
