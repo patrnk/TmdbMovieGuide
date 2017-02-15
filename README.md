@@ -38,12 +38,16 @@ Here, 'xxx' is the substring to search and test.json is a json file retrieved wi
 The script suggests a list of movies to watch based on the movie title provided. The movie must be in a database.
 Example usage:
 ```#!bash
-$ python3 recommend.py 'xXx: Return of Xander Cage' --top 3 --infile test.json
+$ python3 recommend.py 'Monsters, Inc.' -t 7 -i test.json
 Recommendations:
-Jurassic World
-Suicide Squad
-Interstellar
+Monsters University
+Toy Story 3
+Inside Out
+Cars
+Finding Nemo
+Finding Dory
+Brave
 ```
-Here, 'xXx: Return of Xander Cage' is the movie upon which the suggestions are based. '3' is the number of suggested movies and 'test.json' is a json file retrieved with fetch.py (again, it's 'movies.json' by default).
+Here, 'Monsters, Inc.' is the movie upon which the suggestions are based. '7' is the number of suggested movies and 'test.json' is a json file retrieved with fetch.py (again, it's 'movies.json' by default).
 # Purpose
 This is a homework assignment for styleru_py course.
