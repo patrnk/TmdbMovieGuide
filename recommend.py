@@ -9,9 +9,7 @@ def count_common_items_in_lists(list1, list2):
     return len(set(list1) & set(list2))
 
 
-def is_almost_equal(num1, num2, difference_range):
-    if num1 is None or num2 is None:
-        return False
+def is_almost_equal_to(num1, num2, difference_range):
     return num1 - difference_range <= num2 <= num1 + difference_range
 
 
@@ -46,7 +44,9 @@ def get_similarity_rating(movie1, movie2):
     loose_criteria = ['budget', 'runtime', 'vote_average']
     accuracy = {'budget': 0.2, 'runtime': 0.15, 'vote_average': 0.2}
     for criterion in loose_criteria:
-        is_equal = is_almost_equal(movie1[criterion], movie2[criterion],
+        if movie1[criterion] is None or movie2[criterion] is None:
+            continue
+        is_equal = is_almost_equal_to(movie1[criterion], movie2[criterion],
                                    movie2[criterion] * accuracy[criterion])
         rating += int(is_equal) * weight[criterion]
         
