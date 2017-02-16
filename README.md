@@ -22,11 +22,11 @@ Getting additional info...
 Writing to a json-file...
 Done!
 ```
-Here, 1000 is the number of movies to save in a test.json file. In this case, the file already exist, but we decide to overwrite it. By default everything is saved into movies.json.
+Here, 1000 is the number of movies to save in a test.json file. In this case, the file already exists, but we decide to overwrite it. By default everything is saved into movies.json.
 
 This script may take a long time to execute.
 ### search.py
-The script retrieves finds all movie titles with the parameter as a substring. 
+The script finds all movie titles with the parameter as a substring. 
 Example usage:
 ```#!bash
 $ python3 search.py 'xxx' -i test.json
@@ -35,7 +35,7 @@ xXx: Return of Xander Cage
 ```
 Here, 'xxx' is the substring to search and test.json is a json file retrieved with fetch.py (by default, it's 'movie.json').
 ### recommend.py
-The script suggests a list of movies to watch based on the movie title provided. The movie must be in a database.
+The script suggests a list of movies to watch based on the movie title provided. The movie must be in the database.
 Example usage:
 ```#!bash
 $ python3 recommend.py 'Monsters, Inc.' -t 7 -i test.json
